@@ -5,12 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 public class YearlyReport {
-    ArrayList<String> years;
+    ArrayList<YearRecord> years;
 
-    public ArrayList<String> getYears() {
+    public ArrayList<YearRecord> getYears() {
         return years;
     }
 
@@ -18,51 +18,58 @@ public class YearlyReport {
         years = new ArrayList<>();
     }
 
-    public ArrayList<String> readFileContentsOrNull() {
+    public ArrayList<YearRecord> saveContentFromFile() {
         String pathData = null;
+        YearRecord yearRecord;
         try {
             pathData = Files.readString(Path.of("resources/y.2021.csv"));
         } catch (IOException e) {
             System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
         }
-        assert pathData != null;
         String[] lines = pathData.split(System.lineSeparator());
         for (int j = 1; j < lines.length; j++) {
             String[] lineContents = lines[j].split(",");
-            years.addAll(Arrays.asList(lineContents));
+            for (int k = 0; k < lineContents.length; k += 3) {
+                yearRecord = new YearRecord(lineContents[k], lineContents[k + 1], lineContents[k + 2]);
+                years.add(yearRecord);
+            }
         }
         return years;
     }
 
     public void infoOfYear() {
-        if (years.size() < 1) {
+        if (years.isEmpty()) {
             System.out.println("Информация о годовом отчете не была считана!");
-        } else {
-            Path path = Paths.get("resources/y.2021.csv");
-            String fileName = path.getFileName().toString();
-            String numberOnly = fileName.replaceAll("[^0-9]", "");
-            System.out.println("Рассматриваемый год - " + numberOnly);
-
-            for (int j = 1; j < years.size(); j += 6) {
-                int profit = Math.abs(Integer.parseInt(years.get(j)) - Integer.parseInt(years.get(j + 3)));
-                System.out.println("Месяц - " + years.get(j - 1) + ". Прибыль - " + profit);
-            }
-
-            int sumOfProfit = 0;
-            int sumOfSpending = 0;
-            for (int i = 2; i < years.size(); i += 3) {
-                int profitInMonth = 0;
-                int spendingInMonth = 0;
-                if (years.get(i).equals("false")) {
-                    profitInMonth = Integer.parseInt(years.get(i - 1));
-                    sumOfProfit += profitInMonth;
-                } else if (years.get(i).equals("true")) {
-                    spendingInMonth = Integer.parseInt(years.get(i - 1));
-                    sumOfSpending += spendingInMonth;
-                }
-            }
-            System.out.println("Средний расход за все месяцы в году - " + sumOfSpending / 3);
-            System.out.println("Средний доход за все месяцы в году - " + sumOfProfit / 3);
+            return;
         }
+        Path path = Paths.get("resources/y.2021.csv");
+        String fileName = path.getFileName().toString();
+        String year = fileName.replaceAll("[^0-9]", "");
+        System.out.println("Рассматриваемый год - " + year);
+
+        MonthlyReport monthlyReport = new MonthlyReport();
+        HashMap<String, ArrayList<MonthRecord>> months = monthlyReport.saveContentFromFile();
+        for (String month : months.keySet()) {
+            int profitPerMonth = Math.abs(Integer.parseInt(monthlyReport.spendingPerMonth(monthlyReport.getMonths().get(month)))
+                    - Integer.parseInt(monthlyReport.profitPerMonth(monthlyReport.getMonths().get(month))));
+            System.out.println("Месяц - " + month + ". Прибыль - " + profitPerMonth);
+        }
+
+        int sumOfProfit = 0;
+        int sumOfSpending = 0;
+        for (YearRecord yearRecord : years) {
+            int profitInMonth;
+            int spendingInMonth;
+            if (yearRecord.getIsExpense().equals("false")) {
+                profitInMonth = Integer.parseInt(yearRecord.getAmount());
+                sumOfProfit += profitInMonth;
+            } else if (yearRecord.getIsExpense().equals("true")) {
+                spendingInMonth = Integer.parseInt(yearRecord.getAmount());
+                sumOfSpending += spendingInMonth;
+            }
+        }
+        System.out.println("Средний расход за все месяцы в году - " + sumOfSpending / 3);
+        System.out.println("Средний доход за все месяцы в году - " + sumOfProfit / 3);
+
     }
 }

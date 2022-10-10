@@ -15,10 +15,10 @@ public class Main {
             printMenu();
             int command = scanner.nextInt();
             if (command == 1) {
-                monthlyReport.readFileContentsOrNull();
+                monthlyReport.saveContentFromFile();
                 System.out.println("Все месячные отчеты считаны!");
             } else if (command == 2) {
-                yearlyReport.readFileContentsOrNull();
+                yearlyReport.saveContentFromFile();
                 System.out.println("Годовой отчет считан!");
             } else if (command == 3) {
                 reconciliation.reconciliation();
@@ -33,7 +33,6 @@ public class Main {
                 System.out.println("Извините, такой команды пока нет.");
             }
         }
-
     }
 
     public static void printMenu() {
@@ -46,4 +45,3 @@ public class Main {
         System.out.println("0 - Выход");
     }
 }
-
