@@ -1,25 +1,25 @@
 package ru.yandex.praktikum.accounting;
 
 public class YearRecord {
-    private final String month;
-    private final String amount;
-    private final String isExpense;
+    private final int month;
+    private final int amount;
+    private final boolean isExpense;
 
-    public YearRecord(String itemName, String isExpense, String quantity) {
-        this.month = itemName;
-        this.amount = isExpense;
-        this.isExpense = quantity;
+    public YearRecord(int month, int amount, boolean isExpense) {
+        this.month = month;
+        this.amount = amount;
+        this.isExpense = isExpense;
     }
 
-    public String getMonth() {
+    public int getMonth() {
         return month;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public String getIsExpense() {
+    public boolean getIsExpense() {
         return isExpense;
     }
 }

@@ -3,11 +3,11 @@ package ru.yandex.praktikum.accounting;
 public class MonthRecord {
 
     private final String itemName;
-    private final String isExpense;
-    private final String quantity;
-    private final String sumOfOne;
+    private final boolean isExpense;
+    private final int quantity;
+    private final int sumOfOne;
 
-    public MonthRecord(String itemName, String isExpense, String quantity, String sumOfOne) {
+    public MonthRecord(String itemName, boolean isExpense, int quantity, int sumOfOne) {
         this.itemName = itemName;
         this.isExpense = isExpense;
         this.quantity = quantity;
@@ -18,15 +18,15 @@ public class MonthRecord {
         return itemName;
     }
 
-    public String getIsExpense() {
+    public boolean getIsExpense() {
         return isExpense;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public String getSumOfOne() {
+    public int getSumOfOne() {
         return sumOfOne;
     }
 }
