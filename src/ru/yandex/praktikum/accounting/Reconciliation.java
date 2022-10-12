@@ -1,26 +1,26 @@
 package ru.yandex.praktikum.accounting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class Reconciliation {
 
-    private final YearlyReport yearlyReport = new YearlyReport();
-    private final MonthlyReport monthlyReport = new MonthlyReport();
-    private final HashMap<Integer, ArrayList<MonthRecord>> months = monthlyReport.saveDataFromMonthlyReports();
-    private final ArrayList<YearRecord> years = yearlyReport.saveDataFromYearlyReport();
+    private final YearlyReport yearlyReport;
+    private final MonthlyReport monthlyReport;
+
+    public Reconciliation(YearlyReport yearlyReport, MonthlyReport monthlyReport) {
+        this.yearlyReport = yearlyReport;
+        this.monthlyReport = monthlyReport;
+    }
 
     public int checkReports() {
         int month = 0;
-        for (YearRecord yearRecord : years) {
+        for (YearRecord yearRecord : yearlyReport.getYears()) {
             if (yearRecord.getIsExpense()) {
-                int spendingPerMonth = monthlyReport.spendingPerMonth(months.get(yearRecord.getMonth()));
+                int spendingPerMonth = monthlyReport.spendingPerMonth(monthlyReport.getMonths().get(yearRecord.getMonth()));
                 if (yearRecord.getAmount() != spendingPerMonth) {
                     month = yearRecord.getMonth();
                     return month;
                 }
             } else {
-                int profitPerMonth = monthlyReport.profitPerMonth(months.get(yearRecord.getMonth()));
+                int profitPerMonth = monthlyReport.profitPerMonth(monthlyReport.getMonths().get(yearRecord.getMonth()));
                 if (yearRecord.getAmount() != profitPerMonth) {
                     month = yearRecord.getMonth();
                     return month;

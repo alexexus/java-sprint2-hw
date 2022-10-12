@@ -16,17 +16,20 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         MonthlyReport monthlyReport = new MonthlyReport();
         YearlyReport yearlyReport = new YearlyReport();
-        Reconciliation reconciliation = new Reconciliation();
+        Reconciliation reconciliation = new Reconciliation(yearlyReport, monthlyReport);
 
         while (true) {
             printMenu();
             int command = scanner.nextInt();
             if (command == READ_ALL_MONTHLY_REPORTS) {
                 monthlyReport.saveDataFromMonthlyReports();
-                System.out.println("Все месячные отчеты считаны!");
+                System.out.println("Прочитано отчетов: " + monthlyReport.getMonths().size());
             } else if (command == READ_YEARLY_REPORT) {
-                yearlyReport.saveDataFromYearlyReport();
-                System.out.println("Годовой отчет считан!");
+                if (yearlyReport.saveDataFromYearlyReport() == null) {
+                    System.out.println("Отчет не был найден!");
+                } else {
+                    System.out.println("Годовой отчет считан!");
+                }
             } else if (command == VERIFY_REPORTS) {
                 if (monthlyReport.getMonths().isEmpty() || yearlyReport.getYears().isEmpty()) {
                     System.out.println("Отчеты не были считаны!");
@@ -43,9 +46,7 @@ public class Main {
                     continue;
                 }
                 for (int month : monthlyReport.getMonths().keySet()) {
-                    System.out.println("Название месяца - " + monthlyReport.infoOfMonths(month)[0]);
-                    System.out.println("Самый прибыльный товар - " + monthlyReport.infoOfMonths(month)[1] + ". На сумму - " + monthlyReport.infoOfMonths(month)[2]);
-                    System.out.println("Самая большая трата - " + monthlyReport.infoOfMonths(month)[3] + ". На сумму - " + monthlyReport.infoOfMonths(month)[4]);
+                    System.out.println(monthlyReport.infoOfMonths(month));
                 }
             } else if (command == DISPLAY_INFO_ABOUT_YEAR) {
                 if (yearlyReport.getYears().isEmpty()) {
