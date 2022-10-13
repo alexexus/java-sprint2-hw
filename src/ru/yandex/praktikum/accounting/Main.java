@@ -35,11 +35,7 @@ public class Main {
                     System.out.println("Отчеты не были считаны!");
                     continue;
                 }
-                if (reconciliation.checkReports() == 0) {
-                    System.out.println("Операция завершена успешно!");
-                } else {
-                    System.out.println("Месяц в котором обнаружено несоответствие - " + reconciliation.checkReports());
-                }
+                System.out.println(reconciliation.checkReports());
             } else if (command == DISPLAY_INFO_ABOUT_MONTHS) {
                 if (monthlyReport.getMonths().isEmpty()) {
                     System.out.println("Информация о месячных отчетах не была считана!");

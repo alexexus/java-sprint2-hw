@@ -10,23 +10,23 @@ public class Reconciliation {
         this.monthlyReport = monthlyReport;
     }
 
-    public int checkReports() {
-        int month = 0;
+    public String checkReports() {
+        int month;
         for (YearRecord yearRecord : yearlyReport.getYears()) {
             if (yearRecord.getIsExpense()) {
                 int spendingPerMonth = monthlyReport.spendingPerMonth(monthlyReport.getMonths().get(yearRecord.getMonth()));
                 if (yearRecord.getAmount() != spendingPerMonth) {
                     month = yearRecord.getMonth();
-                    return month;
+                    return "Месяц в котором обнаружено несоответствие - " + month;
                 }
             } else {
                 int profitPerMonth = monthlyReport.profitPerMonth(monthlyReport.getMonths().get(yearRecord.getMonth()));
                 if (yearRecord.getAmount() != profitPerMonth) {
                     month = yearRecord.getMonth();
-                    return month;
+                    return "Месяц в котором обнаружено несоответствие - " + month;
                 }
             }
         }
-        return month;
+        return "Операция завершена успешно!";
     }
 }

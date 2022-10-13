@@ -28,7 +28,6 @@ public class MonthlyReport {
     public void saveDataFromMonthlyReports() {
         for (int i = 1; i < 13; i++) {
             ArrayList<MonthRecord> monthRecords = new ArrayList<>();
-            MonthRecord monthRecord;
             String pathData = readFileContentsOrNull("resources/m.20210" + i + ".csv");
             if (pathData == null) {
                 continue;
@@ -36,7 +35,7 @@ public class MonthlyReport {
             String[] lines = pathData.split(System.lineSeparator());
             for (int j = 1; j < lines.length; j++) {
                 String[] lineContents = lines[j].split(",");
-                monthRecord = new MonthRecord(lineContents[0],
+                MonthRecord monthRecord = new MonthRecord(lineContents[0],
                         Boolean.parseBoolean(lineContents[1]),
                         Integer.parseInt(lineContents[2]),
                         Integer.parseInt(lineContents[3]));

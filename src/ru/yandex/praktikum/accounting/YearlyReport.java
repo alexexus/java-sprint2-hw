@@ -30,15 +30,14 @@ public class YearlyReport {
         String pathData = readFileContentsOrNull();
         if (pathData == null) {
             return null;
-        } else {
-            String[] lines = pathData.split(System.lineSeparator());
-            for (int j = 1; j < lines.length; j++) {
-                String[] lineContents = lines[j].split(",");
-                yearRecord = new YearRecord(Integer.parseInt(lineContents[0]),
-                        Integer.parseInt(lineContents[1]),
-                        Boolean.parseBoolean(lineContents[2]));
-                years.add(yearRecord);
-            }
+        }
+        String[] lines = pathData.split(System.lineSeparator());
+        for (int j = 1; j < lines.length; j++) {
+            String[] lineContents = lines[j].split(",");
+            yearRecord = new YearRecord(Integer.parseInt(lineContents[0]),
+                    Integer.parseInt(lineContents[1]),
+                    Boolean.parseBoolean(lineContents[2]));
+            years.add(yearRecord);
         }
         return years;
     }
